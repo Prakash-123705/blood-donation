@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Donor Form | Blood Donation System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h2 class="text-center text-danger">Donor Details Form</h2>
+
+        <div class="card p-4 shadow-sm mx-auto" style="max-width: 500px;">
+            <form>
+
+                <label class="form-label">Blood Group</label>
+                <select id="bloodGroup" class="form-select" required>
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+
+                <label class="form-label mt-3">City / Locality</label>
+                <input type="text" id="city" class="form-control" required>
+
+                <label class="form-label mt-3">Phone Number</label>
+                <input type="text" id="phone" class="form-control" required>
+
+                <label class="form-label mt-3">Last Donation Date</label>
+                <input type="date" id="lastDonation" class="form-control">
+
+                <button class="btn btn-danger w-100 mt-4" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.querySelector("form").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            let userId = localStorage.getItem("userId");
+
+            let bloodGroup = document.getElementById("bloodGroup").value;
+            let city = document.getElementById("city").value;
+            let phone = document.getElementById("phone").value;
+            let lastDonation = document.getElementById("lastDonation").value;
+
+            let response = await fetch("http://localhost:5000/api/donor/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId, bloodGroup, city, phone, lastDonation })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            let result = await response.json();
+            alert(result.message);
+
+            if (result.message === "Donor details saved successfully") {
+                window.location.href = "donor-list.html";
+            }
+        });
+    </script>
+
+</body>
+
+</html>
