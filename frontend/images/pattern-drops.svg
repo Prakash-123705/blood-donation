@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
+  <defs>
+    <pattern id="drops" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+      <path d="M60 20c-8 8-15 18-15 30 0 16 14 30 30 30s30-14 30-30c0-12-7-22-15-30-5-5-15-5-30 0z" fill="#ff8a80" opacity="0.06"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="600" fill="#fafafa"/>
+  <rect width="1200" height="600" fill="url(#drops)"/>
+</svg>

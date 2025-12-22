@@ -1,0 +1,59 @@
+/* Custom styles for Blood Donation UI */
+:root {
+    --brand-red: #d6333f;
+    --brand-dark: #1b1b1f;
+}
+
+body {
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg, #fafafa, #f3f6f9);
+    color: var(--brand-dark);
+}
+
+.navbar-custom {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.brand-logo {
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+.hero {
+    background-image: linear-gradient(0deg, rgba(214, 51, 63, 0.06), rgba(214, 51, 63, 0.02)), url('images/hero.svg');
+    background-size: cover;
+    background-position: center;
+    padding: 60px 0;
+}
+
+.hero .card {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.btn-danger,
+.text-danger {
+    color: var(--brand-red) !important
+}
+
+.card-custom {
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(27, 27, 31, 0.08);
+}
+
+.donor-card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px
+}
+
+.footer {
+    padding: 30px 0;
+    color: #666;
+    font-size: 14px
+}

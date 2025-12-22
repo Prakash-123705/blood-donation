@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <rect width="800" height="450" fill="#fff" rx="12"/>
+  <g transform="translate(60,60)" fill="#d6333f">
+    <circle cx="40" cy="40" r="40" opacity="0.12"/>
+    <path d="M40 10c-11 11-20 24-20 40 0 22 18 40 40 40s40-18 40-40c0-16-9-29-20-40-6-6-20-6-40 0z" fill="#d6333f"/>
+  </g>
+</svg>
