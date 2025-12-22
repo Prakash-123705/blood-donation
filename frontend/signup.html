@@ -39,7 +39,12 @@
                     <option value="receiver">Receiver</option>
                 </select>
 
-                <button class="btn btn-danger w-100 mt-4" type="submit">Signup</button>
+                <button id="signupBtn" class="btn w-100 mt-4" type="submit"
+                    style="background-color: #228B22; color: white; border-color: #228B22;">
+                    <span id="btnText">Create Account</span>
+                    <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"
+                        aria-hidden="true"></span>
+                </button>
             </form>
 
             <p class="text-center mt-3">
@@ -48,25 +53,45 @@
         </div>
     </div>
     <script>
-        document.querySelector("form").addEventListener("submit", async function (e) {
+        const form = document.querySelector("form");
+        const signupBtn = document.getElementById("signupBtn");
+        const btnText = document.getElementById("btnText");
+        const btnSpinner = document.getElementById("btnSpinner");
+
+        form.addEventListener("submit", async function (e) {
             e.preventDefault();
+
+            // Disable button and show spinner
+            signupBtn.disabled = true;
+            btnText.textContent = "Signing up...";
+            btnSpinner.classList.remove("d-none");
 
             let name = document.getElementById("name").value;
             let email = document.getElementById("email").value;
             let password = document.getElementById("password").value;
             let role = document.getElementById("role").value;
 
-            let response = await fetch("http://localhost:5000/api/auth/signup", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, password, role })
-            });
+            try {
+                let response = await fetch("http://localhost:5000/api/auth/signup", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email, password, role })
+                });
 
-            let result = await response.json();
-            alert(result.message);
+                let result = await response.json();
+                alert(result.message);
 
-            if (result.message === "Signup successful") {
-                window.location.href = "login.html";
+                if (result.message === "Signup successful") {
+                    window.location.href = "login.html";
+                }
+            } catch (err) {
+                console.error(err);
+                alert('An error occurred. Please try again.');
+            } finally {
+                // Restore button state
+                signupBtn.disabled = false;
+                btnText.textContent = "Create Account";
+                btnSpinner.classList.add("d-none");
             }
         });
     </script>

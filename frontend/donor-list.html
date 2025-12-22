@@ -48,7 +48,11 @@
                 </div>
 
                 <div class="col-md-4 d-flex align-items-end">
-                    <button class="btn btn-primary w-100" onclick="searchDonors()">Search</button>
+                    <button id="searchBtn" class="btn btn-primary w-100" type="button">
+                        <span id="searchText">Search</span>
+                        <span id="searchSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"
+                            aria-hidden="true"></span>
+                    </button>
                 </div>
 
             </div>
@@ -60,58 +64,86 @@
     </div>
 
     <script>
-        async function searchDonors() {
-            let bloodGroup = document.getElementById("bloodGroup").value.trim();
-            let city = document.getElementById("city").value.trim();
+        (function () {
+            const searchBtn = document.getElementById('searchBtn');
+            const searchText = document.getElementById('searchText');
+            const searchSpinner = document.getElementById('searchSpinner');
 
-            let query = [];
+            async function searchDonors() {
+                console.log('searchDonors called');
+                let bloodGroup = document.getElementById("bloodGroup").value.trim();
+                let city = document.getElementById("city").value.trim();
 
-            if (bloodGroup !== "") query.push(`bloodGroup=${encodeURIComponent(bloodGroup)}`);
-
-            if (city !== "") query.push(`city=${encodeURIComponent(city)}`);
-
-            let url = "http://localhost:5000/api/donor/search";
-            if (query.length > 0) {
-                url += "?" + query.join("&");
-            }
-
-            let response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            let donors = await response.json();
-
-            let output = `<h4 class="text-success">Available Donors:</h4>`;
-
-            if (donors.length === 0) {
-                output += `<p class='text-danger'>No donors found</p>`;
-            }
-
-            // Group donors by blood group
-            const groupedDonors = donors.reduce((groups, donor) => {
-                const group = donor.bloodGroup;
-                if (!groups[group]) {
-                    groups[group] = [];
+                if (bloodGroup === '' && city === '') {
+                    alert('Please select a blood group or enter a city to search.');
+                    return;
                 }
-                groups[group].push(donor);
-                return groups;
-            }, {});
 
-            for (const bloodGroup in groupedDonors) {
-                output += `<h5 class="mt-4 text-primary">${bloodGroup} Donors</h5>`;
-                groupedDonors[bloodGroup].forEach(donor => {
-                    output += `
-            <div class="card p-3 mt-3 shadow-sm">
-                <h6>Donor Details</h6>
-                <p><strong>City:</strong> ${donor.city}</p>
-                <p><strong>Phone:</strong> ${donor.phone}</p>
-                <p><strong>Last Donation:</strong> ${donor.lastDonation}</p>
-            </div>`;
-                });
+                let query = [];
+                if (bloodGroup !== "") query.push(`bloodGroup=${encodeURIComponent(bloodGroup)}`);
+                if (city !== "") query.push(`city=${encodeURIComponent(city)}`);
+
+                let url = "http://localhost:5000/api/donor/search";
+                if (query.length > 0) {
+                    url += "?" + query.join("&");
+                }
+
+                // UI: show loading
+                searchBtn.disabled = true;
+                searchText.textContent = 'Searching...';
+                searchSpinner.classList.remove('d-none');
+
+                try {
+                    let response = await fetch(url);
+                    if (!response.ok) {
+                        const text = await response.text();
+                        throw new Error(`HTTP error ${response.status}: ${text}`);
+                    }
+                    let donors = await response.json();
+
+                    let output = `<h4 class="text-success">Available Donors:</h4>`;
+                    if (!Array.isArray(donors) || donors.length === 0) {
+                        output += `<p class='text-danger'>No donors found</p>`;
+                    } else {
+                        // Group donors by blood group
+                        const groupedDonors = donors.reduce((groups, donor) => {
+                            const group = donor.bloodGroup || 'Unknown';
+                            if (!groups[group]) groups[group] = [];
+                            groups[group].push(donor);
+                            return groups;
+                        }, {});
+
+                        for (const bg in groupedDonors) {
+                            output += `<h5 class="mt-4 text-primary">${bg} Donors</h5>`;
+                            groupedDonors[bg].forEach(donor => {
+                                output += `
+                <div class="card p-3 mt-3 shadow-sm">
+                    <h6>Donor Details</h6>
+                    <p><strong>City:</strong> ${donor.city || 'N/A'}</p>
+                    <p><strong>Phone:</strong> ${donor.phone || 'N/A'}</p>
+                    <p><strong>Last Donation:</strong> ${donor.lastDonation || 'N/A'}</p>
+                </div>`;
+                            });
+                        }
+                    }
+
+                    document.getElementById("result").innerHTML = output;
+                } catch (err) {
+                    console.error('Error searching donors:', err);
+                    alert('Error searching donors: ' + err.message);
+                } finally {
+                    // restore UI
+                    searchBtn.disabled = false;
+                    searchText.textContent = 'Search';
+                    searchSpinner.classList.add('d-none');
+                }
             }
 
-            document.getElementById("result").innerHTML = output;
-        }
+            // attach listener
+            searchBtn.addEventListener('click', searchDonors);
+            // expose for legacy inline use if any
+            window.searchDonors = searchDonors;
+        })();
     </script>
 
 
