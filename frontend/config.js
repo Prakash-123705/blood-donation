@@ -10,3 +10,5 @@ const API_ENDPOINTS = {
   DONOR_ADD: `${API_BASE_URL}/api/donor/add`,
   DONOR_SEARCH: `${API_BASE_URL}/api/donor/search`
 };
+
+console.log('API_BASE_URL:', API_BASE_URL);
