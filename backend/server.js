@@ -8,27 +8,30 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Connect to MongoDB
-mongoose.connect("mongodb://localhost:27017/blood_donation")
-    .then(() => console.log("MongoDB Connected"))
-    .catch(err => console.log(err));
+// MongoDB connection (FIXED)
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log("MongoDB connection error:", err));
 
-// HOME ROUTE (IMPORTANT)
+// Home route
 app.get("/", (req, res) => {
-    res.send("Blood Donation Backend Running");
+  res.send("Blood Donation Backend Running");
 });
 
 // Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/donor", require("./routes/donor"));
 
-// Start Server
+// Health check
 app.get("/health", (req, res) => {
   res.status(200).json({
     status: "ok",
     message: "Backend is healthy"
   });
 });
-app.listen(5000, () => {
-    console.log("Server running on http://localhost:5000");
+
+// Port (FIXED)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
