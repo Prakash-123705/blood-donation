@@ -18,6 +18,7 @@
             </a>
         </div>
     </nav>
+    <script src="config.js"></script>
 
     <div class="container mt-5">
 
@@ -83,7 +84,7 @@
                 if (bloodGroup !== "") query.push(`bloodGroup=${encodeURIComponent(bloodGroup)}`);
                 if (city !== "") query.push(`city=${encodeURIComponent(city)}`);
 
-                let url = "https://blood-donation-1-7x80.onrender.com/api/donor/search";
+                let url = API_ENDPOINTS.DONOR_SEARCH;
                 if (query.length > 0) {
                     url += "?" + query.join("&");
                 }

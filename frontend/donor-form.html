@@ -18,6 +18,7 @@
             </a>
         </div>
     </nav>
+    <script src="config.js"></script>
 
     <div class="container mt-5">
         <h2 class="text-center text-danger">Donor Details Form</h2>
@@ -63,7 +64,7 @@
             let phone = document.getElementById("phone").value;
             let lastDonation = document.getElementById("lastDonation").value;
 
-            let response = await fetch("https://blood-donation-1-7x80.onrender.com/api/donor/add", {
+            let response = await fetch(API_ENDPOINTS.DONOR_ADD, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userId, bloodGroup, city, phone, lastDonation })

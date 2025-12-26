@@ -18,6 +18,7 @@
             </a>
         </div>
     </nav>
+    <script src="config.js"></script>
 
     <div class="container mt-5">
         <h2 class="text-center text-danger">Create Your Account</h2>
@@ -72,7 +73,7 @@
             let role = document.getElementById("role").value;
 
             try {
-                let response = await fetch("https://blood-donation-1-7x80.onrender.com/api/auth/signup", {
+                let response = await fetch(API_ENDPOINTS.SIGNUP, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ name, email, password, role })

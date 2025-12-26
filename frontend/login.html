@@ -18,6 +18,7 @@
             </a>
         </div>
     </nav>
+    <script src="config.js"></script>
 
     <div class="container mt-5">
         <h2 class="text-center text-primary">Login to Your Account</h2>
@@ -45,7 +46,7 @@
             let email = document.getElementById("email").value;
             let password = document.getElementById("password").value;
 
-            let response = await fetch("https://blood-donation-1-7x80.onrender.com/api/auth/login", {
+            let response = await fetch(API_ENDPOINTS.LOGIN, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password })
