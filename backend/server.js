@@ -9,10 +9,9 @@ app.use(express.json());
 app.use(cors());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log("MongoDB connection error:", err));
-
+mongoose.connect("mongodb://localhost:27017/blood_donation")
+    .then(() => console.log("MongoDB Connected"))
+    .catch(err => console.log(err));
 
 // HOME ROUTE (IMPORTANT)
 app.get("/", (req, res) => {
