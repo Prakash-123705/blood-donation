@@ -83,7 +83,7 @@
                 if (bloodGroup !== "") query.push(`bloodGroup=${encodeURIComponent(bloodGroup)}`);
                 if (city !== "") query.push(`city=${encodeURIComponent(city)}`);
 
-                let url = "http://localhost:5000/api/donor/search";
+                let url = "https://blood-donation-1-7x80.onrender.com/api/donor/search";
                 if (query.length > 0) {
                     url += "?" + query.join("&");
                 }
