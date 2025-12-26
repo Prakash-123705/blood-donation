@@ -63,7 +63,7 @@
             let phone = document.getElementById("phone").value;
             let lastDonation = document.getElementById("lastDonation").value;
 
-            let response = await fetch("http://localhost:5000/api/donor/add", {
+            let response = await fetch("https://blood-donation-1-7x80.onrender.com/api/donor/add", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userId, bloodGroup, city, phone, lastDonation })
