@@ -52,7 +52,18 @@ try {
 app.get("/health", (req, res) => {
   res.status(200).json({
     status: "ok",
-    message: "Backend is healthy"
+    message: "Backend is healthy",
+    mongoConnected: mongoose.connection.readyState === 1,
+    mongoUri: process.env.MONGO_URI ? "SET" : "NOT SET"
+  });
+});
+
+// Test endpoint
+app.get("/api/test", (req, res) => {
+  res.json({ 
+    message: "Backend is working!",
+    mongoStatus: mongoose.connection.readyState,
+    timestamp: new Date()
   });
 });
 
