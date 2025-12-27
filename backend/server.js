@@ -15,9 +15,17 @@ app.use(cors({
 }));
 
 // MongoDB connection (FIXED)
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, {
+  connectTimeoutMS: 10000,
+  serverSelectionTimeoutMS: 5000
+})
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log("MongoDB connection error:", err));
+
+// Start server even if MongoDB connection fails
+setTimeout(() => {
+  console.log("Server initialization timeout check");
+}, 3000);
 
 // Home route
 app.get("/", (req, res) => {
@@ -38,6 +46,6 @@ app.get("/health", (req, res) => {
 
 // Port (FIXED)
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
