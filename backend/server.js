@@ -15,6 +15,13 @@ app.use(cors({
 }));
 
 // MongoDB connection (FIXED)
+if (!process.env.MONGO_URI) {
+  console.error("ERROR: MONGO_URI environment variable is not set!");
+  console.error("Please add MONGO_URI to Render environment variables");
+} else {
+  console.log("MONGO_URI found, connecting to MongoDB...");
+}
+
 mongoose.connect(process.env.MONGO_URI, {
   connectTimeoutMS: 10000,
   serverSelectionTimeoutMS: 5000
@@ -33,8 +40,13 @@ app.get("/", (req, res) => {
 });
 
 // Routes
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/donor", require("./routes/donor"));
+try {
+  app.use("/api/auth", require("./routes/auth"));
+  app.use("/api/donor", require("./routes/donor"));
+  console.log("Routes loaded successfully");
+} catch (err) {
+  console.error("Error loading routes:", err);
+}
 
 // Health check
 app.get("/health", (req, res) => {
