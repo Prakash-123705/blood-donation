@@ -14,25 +14,19 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// MongoDB connection (FIXED)
-if (!process.env.MONGO_URI) {
-  console.error("ERROR: MONGO_URI environment variable is not set!");
-  console.error("Please add MONGO_URI to Render environment variables");
+// MongoDB connection - with fallback
+if (process.env.MONGO_URI) {
+  console.log("Connecting to MongoDB...");
+  mongoose.connect(process.env.MONGO_URI, {
+    connectTimeoutMS: 10000,
+    serverSelectionTimeoutMS: 5000
+  })
+    .then(() => console.log("✅ MongoDB Connected"))
+    .catch(err => console.log("❌ MongoDB connection error:", err.message));
 } else {
-  console.log("MONGO_URI found, connecting to MongoDB...");
+  console.warn("⚠️  WARNING: MONGO_URI not set! Backend will run without database.");
+  console.warn("⚠️  Add MONGO_URI to Render environment variables to enable database features.");
 }
-
-mongoose.connect(process.env.MONGO_URI, {
-  connectTimeoutMS: 10000,
-  serverSelectionTimeoutMS: 5000
-})
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log("MongoDB connection error:", err));
-
-// Start server even if MongoDB connection fails
-setTimeout(() => {
-  console.log("Server initialization timeout check");
-}, 3000);
 
 // Home route
 app.get("/", (req, res) => {
