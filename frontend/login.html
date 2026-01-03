@@ -39,6 +39,7 @@
             </p>
         </div>
     </div>
+    <script src="config.js"></script>
     <script>
         document.querySelector("form").addEventListener("submit", async function (e) {
             e.preventDefault();
@@ -51,6 +52,11 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password })
             });
+            if (!response.ok) {
+                const text = await response.text();
+                alert("Login failed: " + text);
+                return;
+            }
 
             let result = await response.json();
 

@@ -53,12 +53,17 @@
             </form>
         </div>
     </div>
+    <script src="config.js"></script>
     <script>
         document.querySelector("form").addEventListener("submit", async function (e) {
             e.preventDefault();
 
             let userId = localStorage.getItem("userId");
-
+            if (!userId) {
+                alert("Please login first.");
+                window.location.href = "login.html";
+                return;
+            }
             let bloodGroup = document.getElementById("bloodGroup").value;
             let city = document.getElementById("city").value;
             let phone = document.getElementById("phone").value;

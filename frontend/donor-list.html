@@ -63,7 +63,7 @@
         <div id="result" class="mt-4"></div>
 
     </div>
-
+    <script src="config.js"></script>
     <script>
         (function () {
             const searchBtn = document.getElementById('searchBtn');
@@ -96,12 +96,14 @@
 
                 try {
                     let response = await fetch(url);
-                    console.log('Fetch response status:', response.status);
+
                     if (!response.ok) {
                         const text = await response.text();
-                        throw new Error(`HTTP error ${response.status}: ${text}`);
+                        throw new Error(text);
                     }
+
                     let donors = await response.json();
+
 
                     let output = `<h4 class="text-success">Available Donors:</h4>`;
                     if (!Array.isArray(donors) || donors.length === 0) {

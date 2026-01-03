@@ -53,49 +53,58 @@
             </p>
         </div>
     </div>
+    <script src="config.js"></script>
     <script>
-        const form = document.querySelector("form");
-        const signupBtn = document.getElementById("signupBtn");
-        const btnText = document.getElementById("btnText");
-        const btnSpinner = document.getElementById("btnSpinner");
-
-        form.addEventListener("submit", async function (e) {
+        document.querySelector("form").addEventListener("submit", async function (e) {
             e.preventDefault();
 
-            // Disable button and show spinner
+            const signupBtn = document.getElementById("signupBtn");
+            const btnText = document.getElementById("btnText");
+            const btnSpinner = document.getElementById("btnSpinner");
+
             signupBtn.disabled = true;
             btnText.textContent = "Signing up...";
             btnSpinner.classList.remove("d-none");
 
-            let name = document.getElementById("name").value;
-            let email = document.getElementById("email").value;
-            let password = document.getElementById("password").value;
-            let role = document.getElementById("role").value;
-
             try {
-                let response = await fetch(API_ENDPOINTS.SIGNUP, {
+                const name = document.getElementById("name").value;
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+                const role = document.getElementById("role").value;
+
+                const response = await fetch(API_ENDPOINTS.SIGNUP, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ name, email, password, role })
                 });
 
-                let result = await response.json();
-                alert(result.message);
-
-                if (result.message === "Signup successful") {
-                    window.location.href = "login.html";
+                const text = await response.text();
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch {
+                    data = { message: text };
                 }
+
+                if (!response.ok) {
+                    alert(data.message || "Signup failed");
+                    return;
+                }
+
+                alert("Signup successful");
+                window.location.href = "login.html";
+
             } catch (err) {
-                console.error(err);
-                alert('An error occurred. Please try again.');
+                console.error("Signup error:", err);
+                alert("Backend not reachable. Check console.");
             } finally {
-                // Restore button state
                 signupBtn.disabled = false;
                 btnText.textContent = "Create Account";
                 btnSpinner.classList.add("d-none");
             }
         });
     </script>
+
 
 
 </body>
