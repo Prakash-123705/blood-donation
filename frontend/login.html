@@ -39,40 +39,42 @@
             </p>
         </div>
     </div>
-    <script src="config.js"></script>
     <script>
         document.querySelector("form").addEventListener("submit", async function (e) {
             e.preventDefault();
 
-            let email = document.getElementById("email").value;
-            let password = document.getElementById("password").value;
+            try {
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
 
-            let response = await fetch(API_ENDPOINTS.LOGIN, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
-            });
-            if (!response.ok) {
-                const text = await response.text();
-                alert("Login failed: " + text);
-                return;
-            }
+                const response = await fetch(API_ENDPOINTS.LOGIN, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
 
-            let result = await response.json();
+                const data = await response.json();
 
-            if (result.message === "Login successful") {
-                localStorage.setItem("token", result.token);
-                localStorage.setItem("userId", result.userId);
-                localStorage.setItem("role", result.role);
+                if (!response.ok) {
+                    alert(data.message || "Login failed");
+                    return;
+                }
+
+                // SUCCESS
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("userId", data.userId);
+                localStorage.setItem("role", data.role);
 
                 alert("Login successful");
-
                 window.location.href = "choice.html";
-            } else {
-                alert(result.message);
+
+            } catch (err) {
+                console.error("Login error:", err);
+                alert("Backend not reachable");
             }
         });
     </script>
+
 
 
 </body>
